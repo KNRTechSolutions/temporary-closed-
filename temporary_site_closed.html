@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#09051a">
+<title>Temporarily Closed</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; min-height: 100%; }
+  body {
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    overflow: hidden;
+    color: #fff;
+    background: #080414;
+  }
+
+  .page {
+    position: relative;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    isolation: isolate;
+    background:
+      radial-gradient(circle at 15% 20%, rgba(0, 229, 255, .16), transparent 28%),
+      radial-gradient(circle at 85% 18%, rgba(255, 0, 153, .18), transparent 30%),
+      radial-gradient(circle at 50% 100%, rgba(111, 0, 255, .25), transparent 40%),
+      linear-gradient(135deg, #09051a 0%, #10072b 48%, #05030f 100%);
+  }
+
+  .aurora {
+    position: absolute;
+    inset: -25%;
+    z-index: -3;
+    filter: blur(70px);
+    opacity: .7;
+    background:
+      conic-gradient(from 0deg at 50% 50%,
+        rgba(0, 242, 255, .0),
+        rgba(0, 242, 255, .25),
+        rgba(255, 0, 204, .22),
+        rgba(111, 0, 255, .3),
+        rgba(0, 242, 255, .0));
+    animation: spin 18s linear infinite;
+  }
+
+  .grid {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    opacity: .2;
+    background-image:
+      linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px);
+    background-size: 48px 48px;
+    transform: perspective(700px) rotateX(58deg) scale(1.5) translateY(25%);
+    transform-origin: center bottom;
+    mask-image: linear-gradient(to top, black, transparent 78%);
+  }
+
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(1px);
+    opacity: .65;
+    z-index: -1;
+    animation: float 8s ease-in-out infinite;
+  }
+  .orb.one { width: 160px; height: 160px; left: 5%; top: 12%; background: radial-gradient(circle at 35% 30%, #00eaff, #6c00ff 55%, transparent 72%); }
+  .orb.two { width: 210px; height: 210px; right: 2%; bottom: 8%; background: radial-gradient(circle at 35% 30%, #ff2acb, #6c00ff 55%, transparent 72%); animation-delay: -3s; }
+  .orb.three { width: 90px; height: 90px; right: 25%; top: 8%; background: radial-gradient(circle, #ffe600, #ff5e00 50%, transparent 72%); animation-delay: -5s; }
+
+  .stars span {
+    position: absolute;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 14px #fff;
+    animation: twinkle 2.5s ease-in-out infinite;
+    opacity: .5;
+  }
+  .stars span:nth-child(1){left:12%;top:18%}.stars span:nth-child(2){left:21%;top:72%;animation-delay:.4s}.stars span:nth-child(3){left:82%;top:62%;animation-delay:1s}.stars span:nth-child(4){left:72%;top:27%;animation-delay:1.7s}.stars span:nth-child(5){left:42%;top:12%;animation-delay:.8s}.stars span:nth-child(6){left:92%;top:42%;animation-delay:1.3s}.stars span:nth-child(7){left:8%;top:48%;animation-delay:2s}
+
+  .card-wrap {
+    width: min(92vw, 900px);
+    perspective: 1400px;
+    animation: enter .9s cubic-bezier(.2,.8,.2,1) both;
+  }
+
+  .card {
+    position: relative;
+    padding: clamp(34px, 6vw, 68px) clamp(24px, 7vw, 74px);
+    border: 1px solid rgba(255,255,255,.16);
+    border-radius: 34px;
+    text-align: center;
+    background: linear-gradient(145deg, rgba(255,255,255,.13), rgba(255,255,255,.035));
+    box-shadow:
+      0 40px 100px rgba(0,0,0,.55),
+      inset 0 1px 0 rgba(255,255,255,.16),
+      0 0 0 1px rgba(0, 225, 255, .04);
+    backdrop-filter: blur(22px) saturate(135%);
+    -webkit-backdrop-filter: blur(22px) saturate(135%);
+    transform-style: preserve-3d;
+    transition: transform .15s ease-out;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: "";
+    position: absolute;
+    width: 360px;
+    height: 360px;
+    top: -220px;
+    left: -130px;
+    border-radius: 50%;
+    background: #00eaff;
+    filter: blur(100px);
+    opacity: .13;
+  }
+  .card::after {
+    content: "";
+    position: absolute;
+    width: 360px;
+    height: 360px;
+    bottom: -250px;
+    right: -120px;
+    border-radius: 50%;
+    background: #ff00b8;
+    filter: blur(100px);
+    opacity: .14;
+  }
+
+  .icon {
+    position: relative;
+    width: 112px;
+    height: 112px;
+    margin: 0 auto 28px;
+    display: grid;
+    place-items: center;
+    border-radius: 32px;
+    background: linear-gradient(145deg, #00eaff, #6b2cff 48%, #ff00ae);
+    box-shadow:
+      0 18px 40px rgba(92, 29, 255, .42),
+      inset 0 2px 0 rgba(255,255,255,.42),
+      inset 0 -10px 20px rgba(0,0,0,.16);
+    transform: translateZ(45px) rotate(-3deg);
+    animation: iconFloat 4s ease-in-out infinite;
+  }
+  .icon::before {
+    content: "";
+    position: absolute;
+    inset: 7px;
+    border-radius: 26px;
+    border: 1px solid rgba(255,255,255,.3);
+  }
+  .icon svg { width: 56px; height: 56px; filter: drop-shadow(0 5px 7px rgba(0,0,0,.2)); }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 15px;
+    margin-bottom: 19px;
+    border: 1px solid rgba(255,255,255,.13);
+    border-radius: 999px;
+    background: rgba(255,255,255,.06);
+    color: #d8d5e9;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    transform: translateZ(28px);
+  }
+  .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #ffd600;
+    box-shadow: 0 0 16px #ffd600;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  h1 {
+    position: relative;
+    margin-bottom: 18px;
+    font-size: clamp(42px, 8vw, 84px);
+    line-height: .95;
+    font-weight: 950;
+    letter-spacing: -.055em;
+    transform: translateZ(58px);
+    text-shadow:
+      0 3px 0 rgba(255,255,255,.08),
+      0 15px 30px rgba(0,0,0,.4);
+    background: linear-gradient(100deg, #fff 0%, #8ffaff 28%, #c6a1ff 60%, #ff7bd8 90%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .subtitle {
+    position: relative;
+    max-width: 660px;
+    margin: 0 auto;
+    color: #d8d4e7;
+    font-size: clamp(16px, 2vw, 20px);
+    line-height: 1.65;
+    transform: translateZ(38px);
+  }
+
+  .notice {
+    position: relative;
+    margin: 34px auto 30px;
+    padding: 18px 20px;
+    max-width: 620px;
+    border-radius: 18px;
+    background: rgba(7, 3, 25, .42);
+    border: 1px solid rgba(255,255,255,.1);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+    transform: translateZ(32px);
+  }
+  .notice strong {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 15px;
+    color: #fff;
+  }
+  .notice p {
+    color: #bcb7d0;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .contact {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    padding: 15px 23px;
+    border-radius: 16px;
+    text-decoration: none;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 850;
+    background: linear-gradient(100deg, #6c36ff, #bf21e8 50%, #ff3ca8);
+    box-shadow: 0 14px 30px rgba(150, 36, 235, .3), inset 0 1px 0 rgba(255,255,255,.35);
+    transform: translateZ(45px);
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .contact:hover {
+    transform: translateZ(45px) translateY(-4px) scale(1.02);
+    box-shadow: 0 20px 42px rgba(150, 36, 235, .44), inset 0 1px 0 rgba(255,255,255,.4);
+  }
+
+  .footer {
+    position: absolute;
+    bottom: 22px;
+    left: 0; right: 0;
+    text-align: center;
+    color: rgba(255,255,255,.36);
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  @keyframes enter { from { opacity: 0; transform: translateY(30px) scale(.96) rotateX(5deg); } to { opacity: 1; transform: none; } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes float { 0%,100% { transform: translate3d(0,0,0) scale(1); } 50% { transform: translate3d(0,-24px,0) scale(1.05); } }
+  @keyframes iconFloat { 0%,100% { transform: translateZ(45px) rotate(-3deg) translateY(0); } 50% { transform: translateZ(45px) rotate(3deg) translateY(-8px); } }
+  @keyframes pulse { 0%,100% { transform: scale(.85); opacity: .7; } 50% { transform: scale(1.15); opacity: 1; } }
+  @keyframes twinkle { 0%,100% { opacity:.2; transform:scale(.7); } 50% { opacity:.9; transform:scale(1.4); } }
+
+  @media (max-width: 600px) {
+    .card { border-radius: 26px; padding: 34px 22px 38px; }
+    .icon { width: 92px; height: 92px; border-radius: 27px; margin-bottom: 22px; }
+    .icon svg { width: 47px; height: 47px; }
+    .notice { margin-top: 26px; }
+    .footer { bottom: 13px; padding: 0 18px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<main class="page" id="page">
+  <div class="aurora"></div>
+  <div class="grid"></div>
+  <div class="orb one"></div>
+  <div class="orb two"></div>
+  <div class="orb three"></div>
+
+  <div class="stars" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <section class="card-wrap">
+    <div class="card" id="card">
+      <div class="icon" aria-hidden="true">
+        <svg viewBox="0 0 64 64" fill="none">
+          <path d="M18 26V21a14 14 0 0 1 28 0v5" stroke="white" stroke-width="5" stroke-linecap="round"/>
+          <rect x="13" y="24" width="38" height="29" rx="8" fill="rgba(255,255,255,.18)" stroke="white" stroke-width="4"/>
+          <circle cx="32" cy="37" r="4" fill="white"/>
+          <path d="M32 41v5" stroke="white" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <div class="eyebrow"><span class="dot"></span> Temporarily Unavailable</div>
+
+      <h1>Site Temporarily Closed</h1>
+
+      <p class="subtitle">
+        This website is temporarily unavailable while we complete an administrative update.
+        Please contact the administrator for assistance or further information.
+      </p>
+
+      <div class="notice">
+        <strong>Need assistance?</strong>
+        <p>Our administrator will be happy to help you with access and next steps.</p>
+      </div>
+
+      <a class="contact" href="mailto:naryana@knrtech.in">
+        <span>✉</span>
+        Contact Administrator
+      </a>
+    </div>
+  </section>
+
+  <div class="footer">Thank you for your understanding</div>
+</main>
+
+<script>
+  // Subtle 3D tilt on desktop
+  const card = document.getElementById('card');
+  const page = document.getElementById('page');
+
+  page.addEventListener('pointermove', (e) => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (window.innerWidth < 700) return;
+
+    const x = (e.clientX / window.innerWidth - 0.5);
+    const y = (e.clientY / window.innerHeight - 0.5);
+    card.style.transform =
+      `rotateX(${(-y * 5).toFixed(2)}deg) rotateY(${(x * 7).toFixed(2)}deg)`;
+  });
+
+  page.addEventListener('pointerleave', () => {
+    card.style.transform = '';
+  });
+</script>
+</body>
+</html>
